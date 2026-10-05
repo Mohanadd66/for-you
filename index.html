@@ -1,1 +1,594 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى أغلـى ما أملك ❤️</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Reem+Kufi:wght@500;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#B76E79',
+                        softPink: '#FFF0F3',
+                        deepRed: '#800020',
+                        blush: '#FFCCD5',
+                        warmDark: '#1A0B10'
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        reem: ['Reem Kufi', 'sans-serif'],
+                        ruqaa: ['Aref Ruqaa', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #1a0b10 0%, #2c121e 50%, #1a0b10 100%);
+            color: #fff0f3;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Floating Hearts Animation Background */
+        .bg-heart {
+            position: fixed;
+            bottom: -100px;
+            font-size: 20px;
+            color: rgba(255, 182, 193, 0.35);
+            animation: floatUp 8s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Envelope Styles */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #800020;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+
+        .envelope:hover {
+            transform: translateY(-5deg) scale(1.02);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #a30e33;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out, z-index 0.3s;
+            z-index: 3;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-left: 150px solid #63031a;
+            border-right: 150px solid #63031a;
+            border-bottom: 100px solid #750621;
+            border-radius: 0 0 12px 12px;
+            z-index: 2;
+        }
+
+        .letter-preview {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            right: 20px;
+            height: 160px;
+            background: #fff0f3;
+            border-radius: 8px;
+            transition: transform 0.6s ease-in-out;
+            z-index: 2;
+            padding: 15px;
+            color: #1a0b10;
+            text-align: center;
+        }
+
+        .envelope.open .letter-preview {
+            transform: translateY(-100px);
+        }
+
+        /* Card 3D Flip Effects */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 280px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner, .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .flip-card-front {
+            background: #2a1520;
+            border: 1px solid rgba(255, 204, 213, 0.2);
+        }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, #800020, #4a0013);
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 204, 213, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a0b10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #800020;
+            border-radius: 4px;
+        }
+
+        /* Glassmorphic effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 204, 213, 0.15);
+        }
+    </style>
+</head>
+<body class="relative min-h-screen text-slate-100 pb-16">
+
+    <div id="hearts-container"></div>
+
+    <!-- Music Player Controls -->
+    <div class="fixed top-4 left-4 z-50 flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-full border border-roseGold/30 shadow-lg">
+        <button id="musicToggle" class="text-rose-400 hover:text-rose-300 transition text-lg focus:outline-none">
+            <i id="musicIcon" class="fas fa-music"></i>
+        </button>
+        <span class="text-xs text-rose-200 font-medium">أغنيتنا المفضلة ✨</span>
+        <!-- Hidden audio tag with copyright-free romantic ambient audio -->
+        <audio id="bgMusic" loop preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112185.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- Edit Mode Float Button for Easy Customization -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="editToggleBtn" onclick="toggleEditModal()" class="bg-roseGold/80 hover:bg-roseGold text-white text-xs px-3 py-2 rounded-full shadow-lg transition flex items-center gap-1.5 backdrop-blur-sm">
+            <i class="fas fa-pen text-xs"></i>
+            <span>تعديل النصوص والصور</span>
+        </button>
+    </div>
+
+    <!-- ENTRANCE / ENVELOPE SECTION -->
+    <section id="introSection" class="min-h-screen flex flex-col justify-center items-center p-4 relative z-10">
+        <div class="text-center mb-10 transition-all duration-700 transform" id="introHeader">
+            <h1 class="font-ruqaa text-4xl md:text-6xl text-rose-300 mb-3 drop-shadow-md">رسالة خاصة لكِ ❤️</h1>
+            <p class="text-slate-300 text-sm md:text-base font-light">اضغطي على الظرف لفتحه واكتشاف المفاجأة</p>
+        </div>
+
+        <div class="envelope-wrapper my-6" onclick="openEnvelope()">
+            <div class="envelope" id="mainEnvelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-pocket"></div>
+                <div class="letter-preview shadow-inner flex flex-col justify-center items-center">
+                    <i class="fas fa-heart text-rose-600 text-3xl mb-2 animate-bounce"></i>
+                    <p class="font-ruqaa text-lg font-bold text-rose-950">إلى حبيبني وعمري..</p>
+                    <span class="text-xs text-rose-800 mt-1">انقري لفتح الرسالة</span>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="openEnvelope()" class="mt-8 px-6 py-2.5 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold text-sm shadow-lg hover:shadow-rose-500/30 transition transform hover:scale-105">
+            افتحي الرسالة ✨
+        </button>
+    </section>
+
+    <!-- MAIN CONTENT SECTION (HIDDEN INITIALLY) -->
+    <main id="mainCard" class="hidden max-w-4xl mx-auto px-4 py-8 relative z-10 transition-all duration-1000 opacity-0 transform translate-y-10">
+
+        <!-- Header Banner -->
+        <div class="text-center my-10 glass-card p-8 rounded-3xl relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl"></div>
+
+            <i class="fas fa-crown text-amber-400 text-3xl mb-3 animate-pulse"></i>
+            <h1 id="editableTitle" class="font-ruqaa text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-pink-300 to-rose-400 mb-4">
+                كل سنة وأنتي كل حاجة حلوة في حياتي ❤️
+            </h1>
+            <p id="editableSubtitle" class="text-rose-100/80 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
+                وجودك بيكملني وبيخلي للدنيا طعم تاني.. كتبتك هنا عشان تفضلي ديماً أغلى ذكرياتي.
+            </p>
+        </div>
+
+        <!-- ROMANTIC LETTER / TYPEWRITER SECTION -->
+        <section class="my-12 glass-card p-6 md:p-10 rounded-3xl relative">
+            <div class="flex items-center gap-3 mb-6 border-b border-rose-500/20 pb-4">
+                <i class="fas fa-quote-right text-rose-400 text-2xl"></i>
+                <h2 class="text-2xl font-bold font-reem text-rose-300">رسالتي ليكي من القلب</h2>
+            </div>
+            
+            <div class="prose prose-invert max-w-none leading-loose text-slate-200 space-y-4 text-base md:text-lg">
+                <p id="editableMessage" class="whitespace-pre-line leading-relaxed font-light">
+من أول يوم دخلتي فيه حياتي وكل حاجة اتغيرت للأحسن..
+ضحكتك بتسعدني، وجودك بيملا عليا الدنيا أمان وراحة، وكل لحظة جنبك بتكون أوقات مش ممكن أنساها.
+
+حبك مش مجرد كلمة، ده إحساس بيخليني حابب أكون أحسن شخص عشانك. شكراً ليكي على كل حاجة حلوة بتعمليها، وعلى وجودك اللطيف والمميز ديماً في يومي.
+
+أنا محظوظ جداً بيكي، وبتمنى نفضل مع بعض ديماً على طول! 🌹
+                </p>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-rose-500/20 flex justify-between items-center text-sm text-rose-300/70">
+                <span id="editableSender">بحبك ديماً وأبداً ❤️</span>
+                <span id="editableDate">2026 / 10 / 6</span>
+            </div>
+        </section>
+
+        <!-- PHOTO GALLERY / MEMORIES -->
+        <section class="my-14">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold font-reem text-rose-300 mb-2">أحلى ذكرياتنا سوا 📸</h2>
+                <p class="text-slate-400 text-sm">اضغطي على الكارت لتشوفي السر اللي وراه!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front flex flex-col justify-between p-3">
+                            <img id="img1" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80" alt="Memory 1" class="w-full h-48 object-cover rounded-xl mb-2">
+                            <p id="imgCaption1" class="text-xs text-rose-200 font-semibold truncate">أول خروجة مميزة لينا ✨</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <i class="fas fa-heart text-3xl mb-3 text-rose-300"></i>
+                            <p id="imgNote1" class="text-sm leading-relaxed">اليوم ده مستحيل أنساه.. كان بداية لأجمل حكاية في حياتي كلها!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front flex flex-col justify-between p-3">
+                            <img id="img2" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Memory 2" class="w-full h-48 object-cover rounded-xl mb-2">
+                            <p id="imgCaption2" class="text-xs text-rose-200 font-semibold truncate">ضحكتك المفضلة 💫</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <i class="fas fa-smile-beam text-3xl mb-3 text-rose-300"></i>
+                            <p id="imgNote2" class="text-sm leading-relaxed">ضحكتك دي هي الحكاية اللي بتهون عليا أي يوم صعب.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front flex flex-col justify-between p-3">
+                            <img id="img3" src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80" alt="Memory 3" class="w-full h-48 object-cover rounded-xl mb-2">
+                            <p id="imgCaption3" class="text-xs text-rose-200 font-semibold truncate">وعد للستقبل 💖</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <i class="fas fa-infinity text-3xl mb-3 text-rose-300"></i>
+                            <p id="imgNote3" class="text-sm leading-relaxed">أوعدك أفضل جنبك ومعاكي وسند ليكي في كل الخطوات الجاية.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- "REASONS WHY I LOVE YOU" INTERACTIVE GRID -->
+        <section class="my-14">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold font-reem text-rose-300 mb-2">ليه أنتي بالذات؟ 🌹</h2>
+                <p class="text-slate-400 text-sm">أسباب بسيطة من آلاف الأسباب اللي بتخليني أحبك</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="glass-card p-5 rounded-2xl hover:border-rose-400/50 transition cursor-pointer flex items-start gap-4 group" onclick="this.classList.toggle('bg-rose-900/30')">
+                    <div class="p-3 bg-rose-500/10 rounded-xl text-rose-400 group-hover:scale-110 transition">
+                        <i class="fas fa-heart text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="reasonTitle1" class="font-bold text-rose-200 mb-1">قلبك الطيب والجميل</h3>
+                        <p id="reasonBody1" class="text-xs text-slate-300 leading-relaxed">طريقتك وتفهمك وروحك الحلوة اللي بتسعد أي مكان تتواجدي فيه.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl hover:border-rose-400/50 transition cursor-pointer flex items-start gap-4 group" onclick="this.classList.toggle('bg-rose-900/30')">
+                    <div class="p-3 bg-rose-500/10 rounded-xl text-rose-400 group-hover:scale-110 transition">
+                        <i class="fas fa-star text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="reasonTitle2" class="font-bold text-rose-200 mb-1">اهتمامك بأصغر التفاصيل</h3>
+                        <p id="reasonBody2" class="text-xs text-slate-300 leading-relaxed">إنك بتاخدي بالك من كل حاجة تخصني وتفاصيلي الصغيرة قبل الكبيرة.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl hover:border-rose-400/50 transition cursor-pointer flex items-start gap-4 group" onclick="this.classList.toggle('bg-rose-900/30')">
+                    <div class="p-3 bg-rose-500/10 rounded-xl text-rose-400 group-hover:scale-110 transition">
+                        <i class="fas fa-laugh-beam text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="reasonTitle3" class="font-bold text-rose-200 mb-1">خفة دمك وضحكتك</h3>
+                        <p id="reasonBody3" class="text-xs text-slate-300 leading-relaxed">ضحكتك اللي بتغير مود يومي وبتخليني ديماً مبسوط مهما كنت مضغوط.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl hover:border-rose-400/50 transition cursor-pointer flex items-start gap-4 group" onclick="this.classList.toggle('bg-rose-900/30')">
+                    <div class="p-3 bg-rose-500/10 rounded-xl text-rose-400 group-hover:scale-110 transition">
+                        <i class="fas fa-gem text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="reasonTitle4" class="font-bold text-rose-200 mb-1">إنك بجد ملهاش بديل</h3>
+                        <p id="reasonBody4" class="text-xs text-slate-300 leading-relaxed">مفيش زيك ولا حد يقدر ياخد مكانك في حياتي إطلاقاً.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE LOVE METER & SURPRISE BUTTON -->
+        <section class="my-14 text-center glass-card p-8 rounded-3xl">
+            <h2 class="text-2xl font-bold font-reem text-rose-300 mb-3">مقياس المحبة بيننا 💕</h2>
+            <p class="text-xs text-slate-300 mb-6">اضغطي هنا علشان تشوفي نسبتك في قلبي!</p>
+
+            <div class="w-full bg-slate-800/80 rounded-full h-6 mb-6 p-1 border border-rose-500/30 overflow-hidden">
+                <div id="loveBar" class="bg-gradient-to-r from-pink-500 to-rose-600 h-full rounded-full transition-all duration-1000 w-0 flex items-center justify-end px-2 text-[10px] text-white font-bold">
+                    0%
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4 flex-wrap">
+                <button onclick="calculateLove()" class="px-6 py-2.5 rounded-full bg-rose-700 hover:bg-rose-600 text-white text-sm font-semibold transition shadow-md">
+                    قياس نسبة الحب 📊
+                </button>
+                <button onclick="triggerConfetti()" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-sm font-semibold transition shadow-lg transform hover:scale-105 flex items-center gap-2">
+                    <i class="fas fa-gift"></i>
+                    <span>دوسي لمفاجأة سريعة! 🎉</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- FOOTER MESSAGE -->
+        <footer class="text-center text-xs text-rose-200/50 pt-8 border-t border-rose-500/10">
+            صنعت بـ ❤️ ودقة خصيصاً لأجلك
+        </footer>
+
+    </main>
+
+    <!-- EASY EDIT MODAL -->
+    <div id="editModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-rose-500/30 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-rose-300">تعديل بيانات الكارت بسهولة ✏️</h3>
+                <button onclick="toggleEditModal()" class="text-slate-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block text-slate-300 mb-1">العنوان الرئيسي:</label>
+                    <input type="text" id="inputTitle" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white" value="كل سنة وأنتي كل حاجة حلوة في حياتي ❤️">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">رسالة الحب الخاصة:</label>
+                    <textarea id="inputMessage" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">من أول يوم دخلتي فيه حياتي وكل حاجة اتغيرت للأحسن..
+ضحكتك بتسعدني، وجودك بيملا عليا الدنيا أمان وراحة، وكل لحظة جنبك بتكون أوقات مش ممكن أنساها.
+
+أنا محظوظ جداً بيكي، وبتمنى نفضل مع بعض ديماً على طول! 🌹</textarea>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">توقيعك (اسمك):</label>
+                    <input type="text" id="inputSender" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white" value="بحبك ديماً وأبداً ❤️">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">روابط الصور (ضع رابط أي صورة من النت):</label>
+                    <input type="text" id="inputImg1" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white mb-2" placeholder="رابط صورة 1">
+                    <input type="text" id="inputImg2" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white mb-2" placeholder="رابط صورة 2">
+                    <input type="text" id="inputImg3" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white" placeholder="رابط صورة 3">
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="saveEdits()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition">
+                        حفظ التغيرات والتحديث ✨
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Floating Background Hearts Generator
+        function createHeart() {
+            const container = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '<i class="fas fa-heart"></i>';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 6 + 's';
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            container.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 9000);
+        }
+        setInterval(createHeart, 400);
+
+        // Music Player Logic
+        const music = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                music.pause();
+                musicIcon.className = 'fas fa-music';
+            } else {
+                music.play().catch(e => console.log("Audio play error:", e));
+                musicIcon.className = 'fas fa-pause text-rose-400 animate-pulse';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Open Envelope Sequence
+        function openEnvelope() {
+            const envelope = document.getElementById('mainEnvelope');
+            const introSection = document.getElementById('introSection');
+            const mainCard = document.getElementById('mainCard');
+
+            envelope.classList.add('open');
+
+            // Try playing audio automatically on interaction
+            if (!isPlaying) {
+                music.play().then(() => {
+                    isPlaying = true;
+                    musicIcon.className = 'fas fa-pause text-rose-400 animate-pulse';
+                }).catch(() => {});
+            }
+
+            // Confetti effect
+            triggerConfetti();
+
+            setTimeout(() => {
+                introSection.classList.add('opacity-0', 'transition-all', 'duration-700');
+                setTimeout(() => {
+                    introSection.style.display = 'none';
+                    mainCard.classList.remove('hidden');
+                    setTimeout(() => {
+                        mainCard.classList.remove('opacity-0', 'translate-y-10');
+                    }, 50);
+                }, 700);
+            }, 1200);
+        }
+
+        // Confetti Heart Burst
+        function triggerConfetti() {
+            confetti({
+                particleCount: 70,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#ff0055', '#ff6699', '#ffb3c6', '#ffffff']
+            });
+        }
+
+        // Love Calculator Animation
+        function calculateLove() {
+            const loveBar = document.getElementById('loveBar');
+            loveBar.style.width = '0%';
+            loveBar.innerText = '0%';
+
+            setTimeout(() => {
+                loveBar.style.width = '100%';
+                loveBar.innerText = '1000% ∞ (غير محدود!)';
+                triggerConfetti();
+            }, 200);
+        }
+
+        // Modal Edit Functionality
+        function toggleEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function saveEdits() {
+            const title = document.getElementById('inputTitle').value;
+            const message = document.getElementById('inputMessage').value;
+            const sender = document.getElementById('inputSender').value;
+            
+            const img1 = document.getElementById('inputImg1').value;
+            const img2 = document.getElementById('inputImg2').value;
+            const img3 = document.getElementById('inputImg3').value;
+
+            if (title) document.getElementById('editableTitle').innerText = title;
+            if (message) document.getElementById('editableMessage').innerText = message;
+            if (sender) document.getElementById('editableSender').innerText = sender;
+
+            if (img1) document.getElementById('img1').src = img1;
+            if (img2) document.getElementById('img2').src = img2;
+            if (img3) document.getElementById('img3').src = img3;
+
+            toggleEditModal();
+            triggerConfetti();
+        }
+    </script>
+</body>
+</html>
